@@ -24,12 +24,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
           
       - name: Install Pact CLI
-        run: |
-          curl -LO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/v1.91.0/pact-1.91.0-linux-x86_64.tar.gz
-          tar xzf pact-1.91.0-linux-x86_64.tar.gz
-          sudo mv pact/bin/* /usr/local/bin/
+        run: gem install pact_broker-client
           
       - name: Install dependencies
         run: npm ci
@@ -73,15 +75,18 @@ jobs:
     
     steps:
       - uses: actions/checkout@v3
-      
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          
       - name: Install Pact CLI
-        run: |
-          curl -LO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/v1.91.0/pact-1.91.0-linux-x86_64.tar.gz
-          tar xzf pact-1.91.0-linux-x86_64.tar.gz
+        run: gem install pact_broker-client
           
       - name: Check if deployment is possible
         run: |
-          ./pact/bin/pact-broker can-i-deploy \
+          pact-broker can-i-deploy \
             --broker-base-url=https://org-a-849e.pactflow.io \
             --broker-token=$PACTFLOW_TOKEN \
             --pacticipant=BookService \
