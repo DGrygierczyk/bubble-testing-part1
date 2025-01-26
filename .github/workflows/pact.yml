@@ -57,12 +57,30 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          
+      - name: Install Pact CLI
+        run: gem install pact_broker-client
           
       - name: Install dependencies
         run: npm ci
         
       - name: Run provider verification
         run: npm run test:pact:provider
+
+      - name: Record provider verification success
+        if: success()
+        run: |
+          pact-broker record-verification-for \
+            --broker-base-url=https://org-a-849e.pactflow.io \
+            --broker-token=$PACTFLOW_TOKEN \
+            --pacticipant=BookService \
+            --version=${{ github.sha }} \
+            --success=true
 
   can-i-deploy:
     needs: [consumer, provider]

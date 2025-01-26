@@ -31,6 +31,10 @@ describe('Book Provider Verification', () => {
       publishVerificationResult: true,
       providerVersion: process.env.GIT_COMMIT || 'dev',
       providerVersionBranch: process.env.GIT_BRANCH || 'main',
+      consumerVersionSelectors: [
+        { mainBranch: true },
+        { branch: process.env.GIT_BRANCH || 'main' }
+      ],
       stateHandlers: {
         'has some books': async () => {
           // The books are already in our service's default state
