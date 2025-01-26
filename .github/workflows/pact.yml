@@ -25,6 +25,12 @@ jobs:
         with:
           node-version: '16'
           
+      - name: Install Pact CLI
+        run: |
+          curl -LO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/v1.91.0/pact-1.91.0-linux-x86_64.tar.gz
+          tar xzf pact-1.91.0-linux-x86_64.tar.gz
+          sudo mv pact/bin/* /usr/local/bin/
+          
       - name: Install dependencies
         run: npm ci
         
