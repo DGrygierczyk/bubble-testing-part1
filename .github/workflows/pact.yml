@@ -75,12 +75,13 @@ jobs:
       - name: Record provider verification success
         if: success()
         run: |
-          pact-broker record-verification-for \
+          pact-broker publish-provider-contract \
             --broker-base-url=https://org-a-849e.pactflow.io \
             --broker-token=$PACTFLOW_TOKEN \
-            --pacticipant=BookService \
-            --version=${{ github.sha }} \
-            --success=true
+            --provider=BookService \
+            --provider-app-version=${{ github.sha }} \
+            --branch=${{ github.ref_name }} \
+            --content-changed=true
 
   can-i-deploy:
     needs: [consumer, provider]
