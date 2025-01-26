@@ -1,0 +1,84 @@
+{
+  "consumer": {
+    "name": "PostsConsumer"
+  },
+  "interactions": [
+    {
+      "description": "a request for all posts",
+      "providerState": "posts exist",
+      "request": {
+        "method": "GET",
+        "path": "/posts"
+      },
+      "response": {
+        "body": [
+          {
+            "body": "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto",
+            "id": 1,
+            "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+            "userId": 1
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type",
+            "min": 1
+          },
+          "$.body[*].body": {
+            "match": "type"
+          },
+          "$.body[*].title": {
+            "match": "type"
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request for post with ID 1",
+      "providerState": "a post with ID 1 exists",
+      "request": {
+        "method": "GET",
+        "path": "/posts/1"
+      },
+      "response": {
+        "body": {
+          "body": "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto",
+          "id": 1,
+          "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+          "userId": 1
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.body": {
+            "match": "type"
+          },
+          "$.body.title": {
+            "match": "type"
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "13.2.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.22",
+      "models": "1.2.3"
+    },
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  },
+  "provider": {
+    "name": "JSONPlaceholder"
+  }
+}
