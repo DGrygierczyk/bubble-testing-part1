@@ -31,9 +31,12 @@ describe('Book Provider Verification', () => {
       publishVerificationResult: true,
       providerVersion: process.env.GIT_COMMIT || 'dev',
       providerVersionBranch: process.env.GIT_BRANCH || 'main',
+      enablePending: true,
+      includeWipPactsSince: '2024-01-01',
       consumerVersionSelectors: [
         { mainBranch: true },
-        { branch: process.env.GIT_BRANCH || 'main' }
+        { branch: process.env.GIT_BRANCH || 'main' },
+        { deployedOrReleased: true }
       ],
       stateHandlers: {
         'has some books': async () => {

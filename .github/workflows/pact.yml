@@ -72,17 +72,6 @@ jobs:
       - name: Run provider verification
         run: npm run test:pact:provider
 
-      - name: Record provider verification success
-        if: success()
-        run: |
-          pact-broker publish-provider-contract \
-            --broker-base-url=https://org-a-849e.pactflow.io \
-            --broker-token=$PACTFLOW_TOKEN \
-            --provider=BookService \
-            --provider-app-version=${{ github.sha }} \
-            --branch=${{ github.ref_name }} \
-            --content-changed=true
-
   can-i-deploy:
     needs: [consumer, provider]
     runs-on: ubuntu-latest
