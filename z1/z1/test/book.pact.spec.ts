@@ -1,7 +1,11 @@
-import { Pact, Publisher } from '@pact-foundation/pact';
+import { Pact, Verifier } from '@pact-foundation/pact';
 import { BookConsumerService } from '../src/book-consumer/book-consumer.service';
 import { Test } from '@nestjs/testing';
 import * as path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 describe('Book Service Contract Tests', () => {
   let getBooksProvider: Pact;
@@ -10,18 +14,10 @@ describe('Book Service Contract Tests', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [
-        {
-          provide: BookConsumerService,
-          useFactory: () => {
-            const service = new BookConsumerService();
-            return service;
-          },
-        },
-      ],
+      providers: [BookConsumerService],
     }).compile();
 
-    bookConsumerService = moduleRef.get<BookConsumerService>();
+    bookConsumerService = moduleRef.get<BookConsumerService>(BookConsumerService);
   });
 
   describe('getBooks', () => {
@@ -115,13 +111,12 @@ describe('Book Service Contract Tests', () => {
 
   // Publish contracts after all tests are done
   afterAll(async () => {
-    const publisher = new Publisher({
-      pactBrokerUrl: 'https://org-a-849e.pactflow.io',
-      pactBrokerToken: process.env.PACTFLOW_TOKEN,
-      consumerVersion: process.env.GIT_COMMIT || 'dev',
-      branch: process.env.GIT_BRANCH || 'main',
-    });
-
-    await publisher.publishPacts();
+    const command = `pact-broker publish ${path.resolve(process.cwd(), 'pacts')} \
+      --broker-base-url=https://org-a-849e.pactflow.io \
+      --broker-token=${process.env.PACTFLOW_TOKEN} \
+      --consumer-app-version=${process.env.GIT_COMMIT || 'dev'} \
+      --branch=${process.env.GIT_BRANCH || 'main'}`;
+    
+    await execAsync(command);
   });
 }); 
