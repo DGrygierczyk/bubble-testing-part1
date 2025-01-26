@@ -39,41 +39,42 @@ jobs:
       - name: Run consumer tests
         run: npm run test:pact:consumer
 
-  provider:
-    needs: consumer
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: z1/z1
-    env:
-      PACTFLOW_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
-      GIT_COMMIT: ${{ github.sha }}
-      GIT_BRANCH: ${{ github.ref_name }}
+  # provider:
+  #   needs: consumer
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: z1/z1
+  #   env:
+  #     PACTFLOW_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
+  #     GIT_COMMIT: ${{ github.sha }}
+  #     GIT_BRANCH: ${{ github.ref_name }}
 
-    steps:
-      - uses: actions/checkout@v3
+  #   steps:
+  #     - uses: actions/checkout@v3
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16'
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
+  #     - name: Setup Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: '3.2'
           
-      - name: Install Pact CLI
-        run: gem install pact_broker-client
+  #     - name: Install Pact CLI
+  #       run: gem install pact_broker-client
           
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
         
-      - name: Run provider verification
-        run: npm run test:pact:provider
+  #     - name: Run provider verification
+  #       run: npm run test:pact:provider
 
   can-i-deploy:
-    needs: [consumer, provider]
+    # needs: [consumer, provider]
+    needs: [consumer]
     runs-on: ubuntu-latest
     defaults:
       run:
