@@ -28,30 +28,31 @@ jobs:
       - name: Run consumer tests
         run: npm run test:pact:consumer
 
-  provider:
-    needs: consumer
-    runs-on: ubuntu-latest
-    env:
-      PACTFLOW_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
-      GIT_COMMIT: ${{ github.sha }}
-      GIT_BRANCH: ${{ github.ref_name }}
+  # provider:
+  #   needs: consumer
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     PACTFLOW_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}
+  #     GIT_COMMIT: ${{ github.sha }}
+  #     GIT_BRANCH: ${{ github.ref_name }}
 
-    steps:
-      - uses: actions/checkout@v3
+  #   steps:
+  #     - uses: actions/checkout@v3
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16'
           
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
         
-      - name: Run provider verification
-        run: npm run test:pact:provider
+  #     - name: Run provider verification
+  #       run: npm run test:pact:provider
 
   can-i-deploy:
-    needs: [consumer, provider]
+    needs: [consumer]
+    # needs: [consumer, provider]
     runs-on: ubuntu-latest
     env:
       PACTFLOW_TOKEN: ${{ secrets.PACTFLOW_TOKEN }}

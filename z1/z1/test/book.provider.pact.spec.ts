@@ -40,11 +40,9 @@ describe('Book Provider Verification', () => {
       ],
       stateHandlers: {
         'has some books': async () => {
-          // The books are already in our service's default state
           return Promise.resolve();
         },
         'has a book with ID 1': async () => {
-          // The book with ID 1 is already in our service's default state
           return Promise.resolve();
         },
       },
